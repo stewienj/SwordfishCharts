@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="Swordfish.NET.Charts.CoordinateConverterCorner"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+  <GroupBox Header="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Header}" BorderBrush="Blue">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">Last Double Clicked Point</TextBlock>
+      <TextBox  Grid.Column="0" Grid.Row="1" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=RegisteredClickX}" IsEnabled="{Binding ElementName=_coordSet, Path=IsChecked}"/>
+      <TextBox  Grid.Column="1" Grid.Row="1" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=RegisteredClickY}" IsEnabled="{Binding ElementName=_coordSet, Path=IsChecked}"/>
+      <TextBlock Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">Convert To</TextBlock>
+      <TextBox  Grid.Column="0" Grid.Row="3" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=ConvertToX}"/>
+      <TextBox  Grid.Column="1" Grid.Row="3" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=ConvertToY}"/>
+      <ToggleButton Grid.Row="4" Grid.ColumnSpan="2"  Focusable="False" x:Name="_coordSet" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=IsFloating}">
+        <ToggleButton.Style>
+          <Style TargetType="{x:Type ToggleButton}">
+            <Setter Property="Content" Value="Reset"/>
+            <Setter Property="IsChecked" Value="True"/>
+            <Style.Triggers>
+              <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Content" Value="Set"/>
+              </Trigger>
+            </Style.Triggers>
+          </Style>
+        </ToggleButton.Style>
+      </ToggleButton>
+    </Grid>
+  </GroupBox>
+</UserControl>

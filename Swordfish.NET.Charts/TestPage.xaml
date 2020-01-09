@@ -1,0 +1,59 @@
+<!--
+// ****************************************************************************
+// Copyright Swordfish Computing Australia 2006                              **
+// http://www.swordfish.com.au/                                              **
+//                                                                           **
+// Filename: Swordfish\WinFX\Charts\TestPage.xaml                            **
+// Authored by: John Stewien of Swordfish Computing                          **
+// Date: April 2006                                                          **
+//                                                                           **
+// - Change Log -                                                            **
+//*****************************************************************************
+-->
+<Window x:Class="Swordfish.NET.Charts.TestPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:SwordfishCharts="clr-namespace:Swordfish.NET.Charts"
+    Title="Swordfish Charts Test App"    
+    >
+  <DockPanel LastChildFill="True">
+    <TabControl DockPanel.Dock="Right">
+      <TabItem Header="Double Clicked Points">
+        <DockPanel LastChildFill="True">
+          <Button DockPanel.Dock="Top" Click="ClearAllPoints_Click">Clear All Points</Button>
+          <TextBox  x:Name="_pointsClicked"/>
+        </DockPanel>
+      </TabItem>
+      <TabItem Header="Transformed Points">
+        <DockPanel LastChildFill="True">
+          <Button DockPanel.Dock="Top" Click="ClearAllPoints_Click">Clear All Points</Button>
+          <TextBox  x:Name="_transformedPoints"/>
+        </DockPanel>
+      </TabItem>
+      <TabItem Header="Setup Transform">
+        <StackPanel>
+          <TextBlock DockPanel.Dock="Top" Text="{Binding TestText}"/>
+          <CheckBox>Tranform Clicked Points</CheckBox>
+          <CheckBox>Use Log Scale</CheckBox>
+          <!-- For some reason databinding not working with these-->
+          <SwordfishCharts:CoordinateConverterCorner Header="Top Left Corner" ClickX="{Binding LastPointSelected.X}" ClickY="{Binding LastPointSelected.Y}"/>
+          <SwordfishCharts:CoordinateConverterCorner Header="Bottom Left Corner" ClickX="{Binding LastPointSelected.X}" ClickY="{Binding LastPointSelected.Y}"/>
+          <SwordfishCharts:CoordinateConverterCorner Header="Bottom Right Corner" ClickX="{Binding LastPointSelected.X}" ClickY="{Binding LastPointSelected.Y}"/>
+          <SwordfishCharts:CoordinateConverterCorner Header="Top Right Corner (Optional)" ClickX="{Binding LastPointSelected.X}" ClickY="{Binding LastPointSelected.Y}"/>
+        </StackPanel>
+      </TabItem>
+    </TabControl>
+    <Grid>
+      <Border x:Name="plotToCopy" BorderBrush="Black" BorderThickness="1" CornerRadius="8" Background="#FFFFF0D0" Margin="0">
+        <SwordfishCharts:ChartControl x:Name="xyLineChart" DrawWholePlotCursor="true"/>
+      </Border>
+      <Border HorizontalAlignment="Left" VerticalAlignment="Top" Padding="1,0,1,0" BorderBrush="Black" Background="#A0005500" BorderThickness="0" CornerRadius="8">
+        <SwordfishCharts:CopyToClipboard x:Name="copyToClipboard" CopyTarget="{Binding ElementName=plotToCopy}" ChartControl="{Binding ElementName=xyLineChart}"/>
+      </Border>
+      <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,0,0,0" Padding="10,0,10,0" BorderBrush="Black" Background="#A0005500" BorderThickness="0" CornerRadius="8">
+        <TextBlock MouseLeftButtonDown="LoadBackdrop_MouseLeftButtonDown">Load Image</TextBlock>
+      </Border>
+    </Grid>
+  </DockPanel>
+</Window>
+
