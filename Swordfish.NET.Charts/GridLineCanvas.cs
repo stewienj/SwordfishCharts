@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -88,7 +89,7 @@ namespace Swordfish.NET.Charts {
         new GradientStop(Colors.Transparent, 1)}));
     }
 
-    protected FormattedText GetText(object text, Brush brush) {
+    protected FormattedText GetText(object text, Brush brush, double pixelsPerDip) {
       text = text ?? "";
       FormattedText formattedText = new FormattedText(
         text.ToString(),
@@ -98,7 +99,8 @@ namespace Swordfish.NET.Charts {
         Math.Max(1,FontSize),
         brush,
         null,
-        TextFormattingMode.Display);
+        TextFormattingMode.Display,
+        pixelsPerDip);
 
       return formattedText;
     }
@@ -108,6 +110,10 @@ namespace Swordfish.NET.Charts {
     /// </summary>
     /// <param name="dc"></param>
     protected override void OnRender(DrawingContext dc) {
+
+      var dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
+      var dpiX = (int)dpiXProperty.GetValue(null, null);
+      var pixelsPerDip = dpiX / 96.0;
 
       Func<double, string> DefaultLabelGenerator = x => x.ToString();
 
@@ -149,7 +155,7 @@ namespace Swordfish.NET.Charts {
         if(GridLineOverrides.Any(x => x.Orientation == Orientation.Vertical && x.Range.Contains(xValue))) {
           continue;
         }
-        FormattedText formattedText = GetText(XAxisLabelGenerator(xValue), _gridLabelBrush);
+        FormattedText formattedText = GetText(XAxisLabelGenerator(xValue), _gridLabelBrush, pixelsPerDip);
         maxXLabelWidth = Math.Max(maxXLabelWidth, formattedText.Width);
       }
 
@@ -170,7 +176,7 @@ namespace Swordfish.NET.Charts {
         if(GridLineOverrides.Any(y => y.Orientation == Orientation.Horizontal && y.Range.Contains(yValue))) {
           continue;
         }
-        FormattedText formattedText = GetText(YAxisLabelGenerator(yValue), _gridLabelBrush);
+        FormattedText formattedText = GetText(YAxisLabelGenerator(yValue), _gridLabelBrush, pixelsPerDip);
         maxYLabelHeight = Math.Max(maxYLabelHeight, formattedText.Width);
       }
 
@@ -201,7 +207,7 @@ namespace Swordfish.NET.Charts {
         Point startPoint = new Point(xPos, size.Height);
         Point endPoint = new Point(xPos, 0);
 
-        FormattedText formattedText = GetText(XAxisLabelGenerator(xValue), _gridLabelBrush);
+        FormattedText formattedText = GetText(XAxisLabelGenerator(xValue), _gridLabelBrush, pixelsPerDip);
 
         maxXLabelHeight = Math.Max(maxXLabelHeight, formattedText.Height);
 
@@ -227,7 +233,7 @@ namespace Swordfish.NET.Charts {
         Point startPoint = new Point(0, yPos);
         Point endPoint = new Point(size.Width, yPos);
 
-        FormattedText formattedText = GetText(YAxisLabelGenerator(yValue), _gridLabelBrush);
+        FormattedText formattedText = GetText(YAxisLabelGenerator(yValue), _gridLabelBrush, pixelsPerDip);
         RotateTransform rotateTransform = new RotateTransform(-90);
         Point textPoint = new Point(-formattedText.Height - 1, yPos + formattedText.Width * .5);
         textPoint = rotateTransform.Inverse.Transform(textPoint);
@@ -312,6 +318,10 @@ namespace Swordfish.NET.Charts {
     /// <returns></returns>
     private double DrawYAxisLabels(DrawingContext dc, double scaleY, IEnumerable<GridLabel> labels, double offset) {
 
+      var dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
+      var dpiX = (int)dpiXProperty.GetValue(null, null);
+      var pixelsPerDip = dpiX / 96.0;
+
       // A list of areas on the label area on which we've already rendered text.
       // If we go to render text on a area that's already used, then go to the next
       // area and move out one width
@@ -332,7 +342,7 @@ namespace Swordfish.NET.Charts {
         }
         double yPos = (-yValue + MinPoint.Y) * scaleY + this.ActualHeight;
         int labelIndex = 0;
-        FormattedText formattedText = GetText(gridLabel.Text, gridLabel.Brush);
+        FormattedText formattedText = GetText(gridLabel.Text, gridLabel.Brush, pixelsPerDip);
 
         UnrestrictedSize labelArea;
         if(gridLabel.Orientation == Orientation.Vertical) {
@@ -410,6 +420,10 @@ namespace Swordfish.NET.Charts {
     /// <returns></returns>
     private double DrawXAxisLabels(DrawingContext dc, double scaleX, IEnumerable<GridLabel> labels, double offset) {
 
+      var dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
+      var dpiX = (int)dpiXProperty.GetValue(null, null);
+      var pixelsPerDip = dpiX / 96.0;
+
       // A list of areas on the label area on which we've already rendered text.
       // If we go to render text on a area that's already used, then go to the next
       // area and move out one width
@@ -430,7 +444,7 @@ namespace Swordfish.NET.Charts {
         }
         double xPos = (-xValue + MinPoint.X) * scaleX + this.ActualWidth;
         int labelIndex = 0;
-        FormattedText formattedText = GetText(gridLabel.Text, gridLabel.Brush);
+        FormattedText formattedText = GetText(gridLabel.Text, gridLabel.Brush, pixelsPerDip);
 
         UnrestrictedSize labelArea;
         if(gridLabel.Orientation == Orientation.Vertical) {

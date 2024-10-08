@@ -1,0 +1,28 @@
+<Project>
+  <!-- 
+    If you want to debug this look at https://docs.microsoft.com/en-us/dotnet/core/project-sdk/overview
+    or dotnet msbuild -preprocess:output.xml <project file name>
+	   
+	  Here's a list of all the properties https://docs.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props
+  -->
+  
+  <!-- SolutionDir is not defined when building projects explicitly -->
+  <PropertyGroup>
+    <SolutionDir Condition=" '$(SolutionDir)' == '' ">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), FLEWSE.sln))\</SolutionDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)Bin\$(Configuration)_$(Platform)\</OutDir>
+    <OutputPath>$(SolutionDir)Bin\$(Configuration)_$(Platform)\</OutputPath>
+    <BaseIntermediateOutputPath>$(SolutionDir)Bin\Base\$(Platform)_$(Configuration)\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(SolutionDir)Bin\Build\$(Platform)_$(Configuration)\$(MSBuildProjectName)\</IntermediateOutputPath>
+    <!-- Turn off deterministic builds, else the timestamp is a hash of the output binary, with the topmost bit set to 1 -->
+    <Deterministic>false</Deterministic>
+  </PropertyGroup>
+
+  <!-- Things that apply to C# and F# -->
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+  </PropertyGroup>
+
+</Project>

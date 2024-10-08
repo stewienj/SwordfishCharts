@@ -644,15 +644,17 @@ namespace Swordfish.NET.General {
     /// <summary>
     /// Gets the timestamp from the file header
     /// </summary>
-    public DateTime TimeStamp {
-      get {
+    public DateTime TimeStamp
+    {
+      get
+      {
         // Timestamp is a date offset from 1970
         DateTime returnValue = new DateTime(1970, 1, 1, 0, 0, 0);
 
         // Add in the number of seconds since 1970/1/1
         returnValue = returnValue.AddSeconds(fileHeader.TimeDateStamp);
         // Adjust to local timezone
-        returnValue += TimeZone.CurrentTimeZone.GetUtcOffset(returnValue);
+        returnValue = TimeZoneInfo.ConvertTimeFromUtc(returnValue, TimeZoneInfo.Local);
 
         return returnValue;
       }
@@ -660,5 +662,5 @@ namespace Swordfish.NET.General {
     }
 
     #endregion Properties
-  }
+    }
 }

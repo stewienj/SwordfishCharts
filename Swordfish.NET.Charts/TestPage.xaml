@@ -40,6 +40,7 @@
           <SwordfishCharts:CoordinateConverterCorner Header="Bottom Left Corner" ClickX="{Binding LastPointSelected.X}" ClickY="{Binding LastPointSelected.Y}"/>
           <SwordfishCharts:CoordinateConverterCorner Header="Bottom Right Corner" ClickX="{Binding LastPointSelected.X}" ClickY="{Binding LastPointSelected.Y}"/>
           <SwordfishCharts:CoordinateConverterCorner Header="Top Right Corner (Optional)" ClickX="{Binding LastPointSelected.X}" ClickY="{Binding LastPointSelected.Y}"/>
+          <Button Click="SaveBackgroundAndSettings_Click">Save Image And Settings To .png File</Button>
         </StackPanel>
       </TabItem>
     </TabControl>

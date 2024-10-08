@@ -29,6 +29,7 @@ namespace Swordfish.NET.Charts {
   /// </summary>
   public partial class TestPage : Window {
 
+    public PngChunks _lastBackdrop = null;
     public ChartPrimitiveXY _dummyLine = null;
 
     public TestPage() {
@@ -94,7 +95,11 @@ namespace Swordfish.NET.Charts {
           using (FileStream stream = new FileStream(dialog.FileName, FileMode.Open)) {
             stream.CopyTo(backupStream);
           }
+          _lastBackdrop = new PngChunks(backupStream);
         }
+
+        string test = _lastBackdrop.GetText("TransformCoordinates").FirstOrDefault();
+
         xyLineChart.Backdrop = new BitmapImage(new Uri(dialog.FileName));
 
         _dummyLine = xyLineChart.CreateXY();
@@ -114,6 +119,20 @@ namespace Swordfish.NET.Charts {
     private void ClearAllPoints_Click(object sender, RoutedEventArgs e) {
       _pointsClicked.Text = "";
       _transformedPoints.Text = "";
+    }
+
+    private void SaveBackgroundAndSettings_Click(object sender, RoutedEventArgs e) {
+      if (_lastBackdrop == null) {
+        return;
+      }
+
+      SaveFileDialog dialog = new SaveFileDialog();
+      dialog.DefaultExt = ".png";
+      dialog.AddExtension = true;
+      if (dialog.ShowDialog() == true) {
+        _lastBackdrop.ReplaceText("TransformCoordinates", "Testing 123.0000,456.0000,789.0000,012.0000");
+        _lastBackdrop.SaveTo(dialog.FileName);
+      }
     }
 
   }

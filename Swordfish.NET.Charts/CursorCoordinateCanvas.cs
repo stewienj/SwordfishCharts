@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using System.Windows.Input;
 using System.Globalization;
 using System.Windows.Controls;
+using System.Reflection;
 
 namespace Swordfish.NET.Charts {
   public class CursorCoordinateCanvas : Canvas {
@@ -174,8 +175,10 @@ namespace Swordfish.NET.Charts {
       
       drawingContext.PushTransform(new ScaleTransform(1, -1));
 
-      
-      FormattedText formattedText = new FormattedText(coordinateText, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 10, blackBrush);
+      var dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
+      var dpiX = (int)dpiXProperty.GetValue(null, null);
+      var pixelsPerDip = dpiX / 96.0;
+      FormattedText formattedText = new FormattedText(coordinateText, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 10, blackBrush, pixelsPerDip);
 
       Rect textBoxRect = new Rect(new Point(_mousePoint.X + radius * .7, -_mousePoint.Y + radius * .7), new Size(formattedText.Width, formattedText.Height));
       double diff = textBoxRect.Right + 3 - ActualWidth;

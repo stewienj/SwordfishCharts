@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-//using Microsoft.WindowsAPICodePack.DirectX;
-//using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
-//using Microsoft.WindowsAPICodePack.DirectX.DXGI;
-using SharpDX.Direct2D1;
+﻿using SharpDX.Direct2D1;
 using SharpDX.DXGI;
+using System;
+using System.Windows;
 
-namespace Swordfish.NET.Charts {
+namespace Swordfish.NET.Charts
+{
   public class PlotRendererD2D : PlotRenderer{
 
     // CodePack D2D
