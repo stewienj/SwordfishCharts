@@ -127,14 +127,18 @@ namespace Swordfish.NET.Charts {
       
       Size size = new Size(this.ActualWidth, this.ActualHeight);
 
-      double scaleX = 0.0;
-      double scaleY = 0.0;
+      double xRange = MaxPoint.X - MinPoint.X;
+      double yRange = MaxPoint.Y - MinPoint.Y;
 
-      if(MaxPoint.X != MinPoint.X)
-        scaleX = size.Width / (MaxPoint.X - MinPoint.X);
-      if(MaxPoint.Y != MinPoint.Y)
-        scaleY = size.Height / (MaxPoint.Y - MinPoint.Y);
+      // Skip rendering if the draw area is invalid
+      if (size.Width <= 0 || size.Height <= 0 || xRange <= 0 || yRange <= 0)
+      {
+        return;
+      }
 
+      double scaleX = size.Width / xRange;
+      double scaleY = size.Height / yRange;
+      
       double spacingX = GridLineSpacingX(_optimalGridLineSpacing.X / scaleX);
       double spacingY = GridLineSpacingY(_optimalGridLineSpacing.Y / scaleY);
 
